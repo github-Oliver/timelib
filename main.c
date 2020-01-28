@@ -63,6 +63,25 @@ int day_of_the_year(int day, int month, int year){
     return 0;
 }
 
+int input_date(){
+    int date[3];
+
+    printf("gib einen Tag ein: ");
+    scanf("%i", &date[0]);
+    fflush(stdin);
+
+    printf("gib einen Monat ein: ");
+    scanf("%i", &date[1]);
+    fflush(stdin);
+
+    printf("gib einen Jahr ein: ");
+    scanf("%i", &date[2]);
+    fflush(stdin);
+
+    return date
+}
+
+
 int main(){
      int days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
      int day, month, year, dayOfYear = 0;
