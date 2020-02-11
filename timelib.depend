@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1581413008 source:c:\users\teilnehmer\desktop\git portabel\git\timelib\main.c
+	<stdio.h>
+	<stdlib.h>
+	"timelib.h"
+
+1581413008 c:\users\teilnehmer\desktop\git portabel\git\timelib\timelib.h
+
