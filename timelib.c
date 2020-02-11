@@ -130,3 +130,32 @@ int exists_date(int day, int month, int year) {
         return 1;
     }
 }
+
+int get_weekday(int date) {
+    int months[12] = {11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    int m = months[date[1] - 1];
+    int d = date[0];
+
+
+    if (month == 1 || month == 2) {
+        int z4 = year % 10;
+        int z3 = (year % 100) * 10;
+    } else {
+        int z4 = (year - 1) % 10;
+        int z3 = ((year - 1) % 100) * 10;
+    }
+    int y = z3 + z4;
+
+        if (month == 1 || month == 2) {
+        int z2 = year % 1000;
+        int z1 = (year % 10000) * 10;
+    } else {
+        int z2 = (year - 1) % 1000;
+        int z1 = ((year - 1) % 10000) * 10;
+    }
+    int c = z1 + z2;
+
+    int w = d + (2.6 * m - 0.2) + y + (y/4) + (c/4);
+
+    printf("%i", w);
+}

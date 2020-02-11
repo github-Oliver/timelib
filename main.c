@@ -11,5 +11,6 @@
 #include "timelib.h"
 
 int main(){
-    day_of_the_year(1, 3, 2020);
+    int date = input_date();
+    get_weekday(date);
 }
