@@ -11,6 +11,11 @@
 #include "timelib.h"
 
 int main(){
-    int date = input_date();
-    get_weekday(date);
+    int day;
+    int month;
+    int year;
+
+    input_date(&day, &month, &year);
+    get_weekday(day, month, year);
+
 }

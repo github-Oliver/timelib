@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//test eines Branch
 
 /**
  *Die Funktion berechnet für ein gegebenes Datum des gregorianischen Kalenders bestehend aus Tag, Monat
  *und Jahr die Nummer des Tages, gezählt von Jahresbeginn (1. Januar) an. Schaltjahre werden bei der
  *Berechnung berücksichtigt. Ist das übergebene Datum ungültig, beträgt der Rückgabewert -1.
+ *
+ *@param Integer: day, Tagesangabe Datum
+ *@param Integer: month, Monatsangabe Datum
+ *@param Integer: year, Jahresangabe Datum
+ *
+ *@return Integer: dayOfYear, Gibt die Anzahl von Tagen in einem Jahr in bezug zu einem Datum an.
  **/
 
 int day_of_the_year(int day, int month, int year){
@@ -17,7 +22,7 @@ int day_of_the_year(int day, int month, int year){
         return -1;
     } else {
         //Für jeden Monat wird die Funktion get_days_for_month aufgerufen bis zum aktuellen Monat.
-        //Die jeweilige Tagesanzahl eines Monats wird dann zu Variable dayOfYear addiert.
+        //Die jeweilige Tagesanzahl eines Monats wird dann zur Variable dayOfYear addiert.
         //Schaltjahre werden hierbei berücksichtigt.
         for(i = 1; i < month; i++){
             dayOfYear += get_days_for_month(i, year);
@@ -34,33 +39,38 @@ int day_of_the_year(int day, int month, int year){
 /**
  *Die Funktion liest 3 Ganzzahlwerte (Integer) ein, für Tag, Monat und Jahr. Wenn das angegebene Datum
  *ungültig ist, wird erneut eingelesen, solange bis ein gültiges Datum eingegeben wurde.
+ *
+ *@param Integer: *zeigerDay, Zeiger auf Speicheradresse der Variable day aus der Main Funktion
+ *@param Integer: *zeigerMonth, Zeiger auf Speicheradresse der Variable month aus der Main Funktion
+ *@param Integer: *zeigerYear, Zeiger auf Speicheradresse der Variable year aus der Main Funktion
  **/
 
-int input_date(){
+void input_date(int *zeigerDay, int *zeigerMonth, int *zeigerYear){
     //Der Nutzer wird zur Eingabe eines Datums aufgefordert, bis das Datum korrekt ist.
-    int date[3];
+    //Die Zeiger verweisen auf Speicheradressen der Variablen day, month, year in der Main-Funktion.
 
     do {
         printf("gib einen Tag ein: ");
-        scanf("%i", &date[0]);
+        scanf("%i", &*zeigerDay);
         fflush(stdin);
 
         printf("gib einen Monat ein: ");
-        scanf("%i", &date[1]);
+        scanf("%i", &*zeigerMonth);
         fflush(stdin);
 
         printf("gib einen Jahr ein: ");
-        scanf("%i", &date[2]);
+        scanf("%i", &*zeigerYear);
         fflush(stdin);
-    } while (!(exists_date(date[0], date[1], date[2])));
-
-    printf("Test: %i.%i.%i", date[0], date[1], date[2]);
-    return date;
+    } while (!(exists_date(*zeigerDay, *zeigerMonth, *zeigerYear))); //wiederholt Eingabeaufforderung bis ein korrektes Datum gewählt wurde.
 }
 
 /**
  *Die Funktion überprüft, ob ein gegebenes Jahr nach den Regeln des gregorianischen Kalender ein Schaltjahr
  *ist. Bei Jahreszahlen vor dem Jahr 1582 wird ein Fehler zurückgegeben.
+ *
+ *@param Integer: year, Jahresangabe eines Datums
+ *
+ *@return Integer, 0 = kein Schaltjahr 1 = Schaltjahr
  **/
 
 int is_leapyear(int year){
@@ -68,7 +78,7 @@ int is_leapyear(int year){
     while(year) {
         //Sonderfall wird berücksichtigt, falls das Jahr kleiner 1582 ist gelten unten stehende Regeln nicht mehr!
         if(year < 1582) {
-            printf("Das eingegebene Jahr muss groesser sein als 1582!");
+            printf("Das eingegebene Jahr muss groesser sein als 1582!\n");
             return -1;
             break;
         }
@@ -104,15 +114,21 @@ int is_leapyear(int year){
 /**
  *Die Funktion bestimmt für einen gegebenen Monat eines gegebenen Jahres, wie viele Tage der Monat hat. Der
  *Wert des Monats muss zwischen 1 und 12 liegen. Schaltjahre werden berücksichtigt.
+ *
+ *@param Integer: month, Monatsangabe eines Datums
+ *@param Integer: year, Jahresangabe eines Datums
+ *
+ *@return Integer, Anzahl der Tage in einem Monat
  **/
 
 int get_days_for_month(int month, int year) {
     int days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    //Für den jeweiligen Monat wird die Tagesanzahl aus dem days Array extrahiert.
 
-    if(month < 1 || month > 12) {
-        printf("Der Monat lieg ausserhalb des Wertebereichs!");
+    if((month < 1 || month > 12) || (year < 1582 || year > 2400)) {
         return -1;
     } else {
+        //Wenn ein Schaltjahr vorliegt wird die Tagesanzahl für den Februar angepasst.
         if(is_leapyear(year)){
             days[1] = 29;
         }
@@ -123,41 +139,54 @@ int get_days_for_month(int month, int year) {
 /**
  *Die Funktion überprüft, ob ein eingegebenes Datum gültig ist. Daten vor dem 1.1.1582 sind ungültig, genauso
  *wie alle Daten nach dem 31.12.2400.
+ *
+ *@param Integer: day, Tagesangabe Datum
+ *@param Integer: month, Monatsangabe Datum
+ *@param Integer: year, Jahresangabe Datum
+ *
+ *@return Integer, 0 = Datumsangabe existiert nicht 1 = Datumsangabe existiert
  **/
 
 int exists_date(int day, int month, int year) {
-    if((day > get_days_for_month(month, year) || day < 1 || month > 12 || month < 1 || year < 1) || (year < 1582) || (year > 2400)) {
+    //Bedingung gültiges Datum:
+    //Anzahl der Tag im Monat ist nicht größer als möglich, Rückgriff auf get_days_for_month Funktion.
+    //Tageszahl nicht kleiner als 1.
+    //Monatszahl nicht größer als 12.
+    //Monatsanzahl nicht kleiner als 1.
+    //Jahreszahl nicht kleines als 1582.
+    //Jahreszahl nicht größer als 2400
+
+    if(day > get_days_for_month(month, year) || day < 1 || month > 12 || month < 1 || (year < 1582) || (year > 2400)) {
         return 0;
     } else {
         return 1;
     }
 }
 
-int get_weekday(int date) {
+
+int get_weekday(double day, int month, int year) {
     int months[12] = {11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    int m = months[date[1] - 1];
-    int d = date[0];
+    int d = day;
+    int m = months[month - 1];
+    int y = 0;
+    int c = 0;
 
 
     if (month == 1 || month == 2) {
-        int z4 = year % 10;
-        int z3 = (year % 100) * 10;
+        y = ((year - 1) % 100);
     } else {
-        int z4 = (year - 1) % 10;
-        int z3 = ((year - 1) % 100) * 10;
+        y = (year % 100);
     }
-    int y = z3 + z4;
 
-        if (month == 1 || month == 2) {
-        int z2 = year % 1000;
-        int z1 = (year % 10000) * 10;
+    if (month == 1 || month == 2) {
+        c = ((year - 1) - ((year - 1) % 100)) / 100;
     } else {
-        int z2 = (year - 1) % 1000;
-        int z1 = ((year - 1) % 10000) * 10;
+        c = ((year) - (year % 100)) / 100;
     }
-    int c = z1 + z2;
 
-    int w = d + (2.6 * m - 0.2) + y + (y/4) + (c/4);
-
+    int w = (d + (2.6 * m - 0.2) + y + (y/4) + (c/4) - 2 * c) % 7;
+    printf("%i \n", y);
+    printf("%i \n", c);
     printf("%i", w);
 }
+
