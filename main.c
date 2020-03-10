@@ -11,11 +11,8 @@
 #include "timelib.h"
 
 int main(){
-    int day;
-    int month;
-    int year;
-
-    input_date(&day, &month, &year);
-    get_weekday(day, month, year);
-
+    struct date currentDate;
+    currentDate = input_date();
+    day_of_the_year(currentDate);
+    //day_of_the_year(currentDate);
 }

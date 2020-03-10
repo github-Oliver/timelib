@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "timelib.h"
 
 
 /**
@@ -14,21 +15,21 @@
  *@return Integer: dayOfYear, Gibt die Anzahl von Tagen in einem Jahr in bezug zu einem Datum an.
  **/
 
-int day_of_the_year(int day, int month, int year){
+int day_of_the_year(struct date tempDate){
     int dayOfYear = 0;
     int i = 0;
     //ist das Datum gültig?
-    if(exists_date(day, month, year) == 0) {
+    if(exists_date(tempDate) == 0) {
         return -1;
     } else {
         //Für jeden Monat wird die Funktion get_days_for_month aufgerufen bis zum aktuellen Monat.
         //Die jeweilige Tagesanzahl eines Monats wird dann zur Variable dayOfYear addiert.
         //Schaltjahre werden hierbei berücksichtigt.
-        for(i = 1; i < month; i++){
-            dayOfYear += get_days_for_month(i, year);
+        for(i = 1; i < tempDate.month; i++){
+            dayOfYear += get_days_for_month(i, tempDate.year);
         }
 
-        dayOfYear += day;
+        dayOfYear += tempDate.day;
 
         printf("Es ist der %i Tag im Jahr", dayOfYear);
 
@@ -45,23 +46,24 @@ int day_of_the_year(int day, int month, int year){
  *@param Integer: *zeigerYear, Zeiger auf Speicheradresse der Variable year aus der Main Funktion
  **/
 
-void input_date(int *zeigerDay, int *zeigerMonth, int *zeigerYear){
+struct date input_date(){
     //Der Nutzer wird zur Eingabe eines Datums aufgefordert, bis das Datum korrekt ist.
     //Die Zeiger verweisen auf Speicheradressen der Variablen day, month, year in der Main-Funktion.
-
+    struct date inputdate;
     do {
         printf("gib einen Tag ein: ");
-        scanf("%i", &*zeigerDay);
+        scanf("%i", &inputdate.day);
         fflush(stdin);
 
         printf("gib einen Monat ein: ");
-        scanf("%i", &*zeigerMonth);
+        scanf("%i", &inputdate.month);
         fflush(stdin);
 
         printf("gib einen Jahr ein: ");
-        scanf("%i", &*zeigerYear);
+        scanf("%i", &inputdate.year);
         fflush(stdin);
-    } while (!(exists_date(*zeigerDay, *zeigerMonth, *zeigerYear))); //wiederholt Eingabeaufforderung bis ein korrektes Datum gewählt wurde.
+    } while (!(exists_date(inputdate))); //wiederholt Eingabeaufforderung bis ein korrektes Datum gewählt wurde.
+    return inputdate;
 }
 
 /**
@@ -147,7 +149,7 @@ int get_days_for_month(int month, int year) {
  *@return Integer, 0 = Datumsangabe existiert nicht 1 = Datumsangabe existiert
  **/
 
-int exists_date(int day, int month, int year) {
+int exists_date(struct date tempDate) {
     //Bedingung gültiges Datum:
     //Anzahl der Tag im Monat ist nicht größer als möglich, Rückgriff auf get_days_for_month Funktion.
     //Tageszahl nicht kleiner als 1.
@@ -156,14 +158,14 @@ int exists_date(int day, int month, int year) {
     //Jahreszahl nicht kleines als 1582.
     //Jahreszahl nicht größer als 2400
 
-    if(day > get_days_for_month(month, year) || day < 1 || month > 12 || month < 1 || (year < 1582) || (year > 2400)) {
+    if(tempDate.day > get_days_for_month(tempDate.month, tempDate.year) || tempDate.day < 1 || tempDate.month > 12 || tempDate.month < 1 || (tempDate.year < 1582) || (tempDate.year > 2400)) {
         return 0;
     } else {
         return 1;
     }
 }
 
-
+/*
 int get_weekday(double day, int month, int year) {
     int months[12] = {11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     int d = day;
@@ -189,4 +191,4 @@ int get_weekday(double day, int month, int year) {
     printf("%i \n", c);
     printf("%i", w);
 }
-
+*/
