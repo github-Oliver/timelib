@@ -14,5 +14,4 @@ int main(){
     struct date currentDate;
     currentDate = input_date();
     day_of_the_year(currentDate);
-    //day_of_the_year(currentDate);
 }

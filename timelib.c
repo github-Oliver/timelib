@@ -2,15 +2,12 @@
 #include <stdlib.h>
 #include "timelib.h"
 
-
 /**
  *Die Funktion berechnet für ein gegebenes Datum des gregorianischen Kalenders bestehend aus Tag, Monat
  *und Jahr die Nummer des Tages, gezählt von Jahresbeginn (1. Januar) an. Schaltjahre werden bei der
  *Berechnung berücksichtigt. Ist das übergebene Datum ungültig, beträgt der Rückgabewert -1.
  *
- *@param Integer: day, Tagesangabe Datum
- *@param Integer: month, Monatsangabe Datum
- *@param Integer: year, Jahresangabe Datum
+ *@param struct: tempDate, struct mit properties: day, month, year.
  *
  *@return Integer: dayOfYear, Gibt die Anzahl von Tagen in einem Jahr in bezug zu einem Datum an.
  **/
@@ -41,9 +38,7 @@ int day_of_the_year(struct date tempDate){
  *Die Funktion liest 3 Ganzzahlwerte (Integer) ein, für Tag, Monat und Jahr. Wenn das angegebene Datum
  *ungültig ist, wird erneut eingelesen, solange bis ein gültiges Datum eingegeben wurde.
  *
- *@param Integer: *zeigerDay, Zeiger auf Speicheradresse der Variable day aus der Main Funktion
- *@param Integer: *zeigerMonth, Zeiger auf Speicheradresse der Variable month aus der Main Funktion
- *@param Integer: *zeigerYear, Zeiger auf Speicheradresse der Variable year aus der Main Funktion
+ *@return struct: tempDate, struct mit properties: day, month, year.
  **/
 
 struct date input_date(){
@@ -142,9 +137,7 @@ int get_days_for_month(int month, int year) {
  *Die Funktion überprüft, ob ein eingegebenes Datum gültig ist. Daten vor dem 1.1.1582 sind ungültig, genauso
  *wie alle Daten nach dem 31.12.2400.
  *
- *@param Integer: day, Tagesangabe Datum
- *@param Integer: month, Monatsangabe Datum
- *@param Integer: year, Jahresangabe Datum
+ *@param struct: tempDate, struct mit properties: day, month, year.
  *
  *@return Integer, 0 = Datumsangabe existiert nicht 1 = Datumsangabe existiert
  **/
