@@ -26,6 +26,7 @@ int day_of_the_year(struct date tempDate){
             dayOfYear += get_days_for_month(i, tempDate.year);
         }
 
+        //Abschließend werden die Tage der Datumsangabe zum Ergebnis addiert.
         dayOfYear += tempDate.day;
 
         printf("Es ist der %i Tag im Jahr", dayOfYear);
@@ -67,13 +68,14 @@ struct date input_date(){
  *
  *@param Integer: year, Jahresangabe eines Datums
  *
- *@return Integer, 0 = kein Schaltjahr 1 = Schaltjahr
+ *@return Integer, 0 = kein Schaltjahr, 1 = Schaltjahr, -1 = Jahr außerhalb des Wertebereichs
  **/
 
 int is_leapyear(int year){
 
     while(year) {
         //Sonderfall wird berücksichtigt, falls das Jahr kleiner 1582 ist gelten unten stehende Regeln nicht mehr!
+        //Dem entsprechend wird eine Fehlermeldung zurückgegeben.
         if(year < 1582) {
             printf("Das eingegebene Jahr muss groesser sein als 1582!\n");
             return -1;
@@ -119,9 +121,10 @@ int is_leapyear(int year){
  **/
 
 int get_days_for_month(int month, int year) {
-    int days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     //Für den jeweiligen Monat wird die Tagesanzahl aus dem days Array extrahiert.
+    int days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+    //Abfrabe der gueltigkeit fuer Monat und Jahr.
     if((month < 1 || month > 12) || (year < 1582 || year > 2400)) {
         return -1;
     } else {
@@ -150,7 +153,6 @@ int exists_date(struct date tempDate) {
     //Monatsanzahl nicht kleiner als 1.
     //Jahreszahl nicht kleines als 1582.
     //Jahreszahl nicht größer als 2400
-
     if(tempDate.day > get_days_for_month(tempDate.month, tempDate.year) || tempDate.day < 1 || tempDate.month > 12 || tempDate.month < 1 || (tempDate.year < 1582) || (tempDate.year > 2400)) {
         return 0;
     } else {
@@ -164,27 +166,32 @@ void get_weekday(struct date tempDate) {
     //Hier leigt eine Formel von Wikipedia zugrunde.
     //https://de.wikipedia.org/wiki/Wochentagsberechnung
     //Diese wurde implementiert.
-    int months[12] = {11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    int d = tempDate.day;
-    int m = months[tempDate.month - 1];
+    int months[12] = {11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int d = tempDate.day; //Wochentag 1 - 31
+    int m = months[tempDate.month - 1]; //Monat 1 - 12
     int y = 0;
     int c = 0;
 
-
+    //Wert der Variable Y: Die beiden letzten Stellen der Jahreszahl,
+    //bei den Monaten Januar und Februar die letzten Stellen des Vorjahres
     if (tempDate.month == 1 || tempDate.month == 2) {
         y = ((tempDate.year - 1) % 100);
     } else {
         y = (tempDate.year % 100);
     }
 
+    //Wert der Variable C: Die beiden ersten Stellen der Jahreszahl,
+    //bei den Monaten Januar und Februar die ersten Stellen des Vorjahres.
     if (tempDate.month == 1 || tempDate.month == 2) {
         c = ((tempDate.year - 1) - ((tempDate.year - 1) % 100)) / 100;
     } else {
         c = ((tempDate.year) - (tempDate.year % 100)) / 100;
     }
 
+    //Formelt gemaeß dem oben aufgefuehrten Link.
     int w = (int)(d + (2.6 * m - 0.2) + y + (y/4) + (c/4) - 2 * c) % 7;
 
+    //Der fuer die Variable w errechnete Wert, wird in einen Tag uebersetzt.
     printf("\n");
 
     switch(w) {
@@ -198,5 +205,7 @@ void get_weekday(struct date tempDate) {
     default: printf("Keine Wochentagsangabe mgl."); break;
 
     }
+
+    return w;
 }
 
