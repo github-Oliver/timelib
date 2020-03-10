@@ -11,4 +11,5 @@ struct date input_date(void);
 int is_leapyear(int year);
 int get_days_for_month(int month, int year);
 int exists_date(struct date tempDate);
+void get_weekday(struct date tempDate);
 #endif // TIMELIB_H_INCLUDED

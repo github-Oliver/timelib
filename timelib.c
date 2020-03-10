@@ -158,30 +158,45 @@ int exists_date(struct date tempDate) {
     }
 }
 
-/*
-int get_weekday(double day, int month, int year) {
+
+
+void get_weekday(struct date tempDate) {
+    //Hier leigt eine Formel von Wikipedia zugrunde.
+    //https://de.wikipedia.org/wiki/Wochentagsberechnung
+    //Diese wurde implementiert.
     int months[12] = {11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    int d = day;
-    int m = months[month - 1];
+    int d = tempDate.day;
+    int m = months[tempDate.month - 1];
     int y = 0;
     int c = 0;
 
 
-    if (month == 1 || month == 2) {
-        y = ((year - 1) % 100);
+    if (tempDate.month == 1 || tempDate.month == 2) {
+        y = ((tempDate.year - 1) % 100);
     } else {
-        y = (year % 100);
+        y = (tempDate.year % 100);
     }
 
-    if (month == 1 || month == 2) {
-        c = ((year - 1) - ((year - 1) % 100)) / 100;
+    if (tempDate.month == 1 || tempDate.month == 2) {
+        c = ((tempDate.year - 1) - ((tempDate.year - 1) % 100)) / 100;
     } else {
-        c = ((year) - (year % 100)) / 100;
+        c = ((tempDate.year) - (tempDate.year % 100)) / 100;
     }
 
-    int w = (d + (2.6 * m - 0.2) + y + (y/4) + (c/4) - 2 * c) % 7;
-    printf("%i \n", y);
-    printf("%i \n", c);
-    printf("%i", w);
+    int w = (int)(d + (2.6 * m - 0.2) + y + (y/4) + (c/4) - 2 * c) % 7;
+
+    printf("\n");
+
+    switch(w) {
+    case 0: printf("Sonntag"); break;
+    case 1: printf("Montag"); break;
+    case 2: printf("Dienstag"); break;
+    case 3: printf("Mittwoch"); break;
+    case 4: printf("Donnerstag"); break;
+    case 5: printf("Freitag"); break;
+    case 7: printf("Samstag"); break;
+    default: printf("Keine Wochentagsangabe mgl."); break;
+
+    }
 }
-*/
+
